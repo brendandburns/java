@@ -26,8 +26,12 @@ public class KubeconfigAuthentication implements Authentication {
   public KubeconfigAuthentication(final KubeConfig config) throws IOException {
     this.clientCert =
         KubeConfig.getDataOrFile(
-            config.getClientCertificateData(), config.getClientCertificateFile());
-    this.clientKey = KubeConfig.getDataOrFile(config.getClientKeyData(), config.getClientKeyFile());
+            config.getClientCertificateData(),
+            config.getClientCertificateFile(),
+            config.getBasePath());
+    this.clientKey =
+        KubeConfig.getDataOrFile(
+            config.getClientKeyData(), config.getClientKeyFile(), config.getBasePath());
     this.username = config.getUsername();
     this.password = config.getPassword();
     this.token = config.getAccessToken();

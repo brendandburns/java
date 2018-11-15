@@ -15,11 +15,14 @@ package io.kubernetes.client.util;
 import io.kubernetes.client.util.authenticators.Authenticator;
 import io.kubernetes.client.util.authenticators.AzureActiveDirectoryAuthenticator;
 import io.kubernetes.client.util.authenticators.GCPAuthenticator;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +57,7 @@ public class KubeConfig {
   String currentNamespace;
   Object preferences;
   ConfigPersister persister;
+  Path basePath;
 
   public static void registerAuthenticator(Authenticator auth) {
     synchronized (authenticators) {
@@ -66,8 +70,17 @@ public class KubeConfig {
     registerAuthenticator(new AzureActiveDirectoryAuthenticator());
   }
 
-  /** Load a Kubernetes config from a Reader */
-  public static KubeConfig loadKubeConfig(Reader input) {
+  public static KubeConfig loadKubeConfig(File file) throws IOException {
+    return loadKubeConfig(new FileReader(file), file.toPath().getParent());
+  }
+
+  /**
+   * Load a Kubernetes config from a Reader
+   *
+   * @param input The reader to read data from
+   * @param basePath The base path to load files from if the paths aren't global [optional]
+   */
+  public static KubeConfig loadKubeConfig(Reader input, Path basePath) {
     Yaml yaml = new Yaml(new SafeConstructor());
     Object config = yaml.load(input);
     Map<String, Object> configMap = (Map<String, Object>) config;
@@ -81,6 +94,7 @@ public class KubeConfig {
     KubeConfig kubeConfig = new KubeConfig(contexts, clusters, users);
     kubeConfig.setContext(currentContext);
     kubeConfig.setPreferences(preferences);
+    kubeConfig.setBasePath(basePath);
 
     return kubeConfig;
   }
@@ -90,6 +104,14 @@ public class KubeConfig {
     this.contexts = contexts;
     this.clusters = clusters;
     this.users = users;
+  }
+
+  public Path getBasePath() {
+    return basePath;
+  }
+
+  public void setBasePath(Path basePath) {
+    this.basePath = basePath;
   }
 
   public String getCurrentContext() {
@@ -272,12 +294,17 @@ public class KubeConfig {
     return null;
   }
 
-  public static byte[] getDataOrFile(final String data, final String file) throws IOException {
+  public static byte[] getDataOrFile(final String data, final String file, final Path basePath)
+      throws IOException {
     if (data != null) {
       return Base64.decodeBase64(data);
     }
     if (file != null) {
-      return Files.readAllBytes(Paths.get(file));
+      Path filePath = Paths.get(file);
+      if (basePath != null && !filePath.isAbsolute()) {
+        filePath = basePath.resolve(filePath);
+      }
+      return Files.readAllBytes(filePath);
     }
     return null;
   }

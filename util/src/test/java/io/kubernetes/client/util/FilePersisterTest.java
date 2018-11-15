@@ -34,7 +34,8 @@ public class FilePersisterTest {
     File file = folder.newFile("testconfig");
     FilePersister fp = new FilePersister(file.getPath());
 
-    KubeConfig config = KubeConfig.loadKubeConfig(new FileReader(KUBECONFIG_FILE_PATH));
+    KubeConfig config =
+        KubeConfig.loadKubeConfig(new FileReader(KUBECONFIG_FILE_PATH), file.toPath());
 
     fp.save(
         config.getContexts(),
@@ -43,7 +44,7 @@ public class FilePersisterTest {
         config.getPreferences(),
         config.getCurrentContext());
 
-    KubeConfig configOut = KubeConfig.loadKubeConfig(new FileReader(file));
+    KubeConfig configOut = KubeConfig.loadKubeConfig(new FileReader(file), file.toPath());
 
     assertEquals(config.getCurrentContext(), configOut.getCurrentContext());
     assertEquals(config.getClusters(), configOut.getClusters());

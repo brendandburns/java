@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +75,7 @@ public class Config {
   }
 
   public static ApiClient fromConfig(String fileName) throws IOException {
-    return fromConfig(new FileReader(fileName));
+    return fromConfig(new FileReader(fileName), Paths.get(fileName).getParent());
   }
 
   public static ApiClient fromConfig(InputStream stream) throws IOException {
@@ -81,7 +83,11 @@ public class Config {
   }
 
   public static ApiClient fromConfig(Reader input) throws IOException {
-    return fromConfig(KubeConfig.loadKubeConfig(input));
+    return fromConfig(input, null);
+  }
+
+  public static ApiClient fromConfig(Reader input, Path basePath) throws IOException {
+    return fromConfig(KubeConfig.loadKubeConfig(input, basePath));
   }
 
   public static ApiClient fromConfig(KubeConfig config) throws IOException {

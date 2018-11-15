@@ -14,13 +14,17 @@ package io.kubernetes.client.util;
 
 import static org.junit.Assert.*;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Resources;
 import io.kubernetes.client.util.authenticators.AzureActiveDirectoryAuthenticator;
 import io.kubernetes.client.util.authenticators.GCPAuthenticator;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.file.Files;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,7 +55,7 @@ public class KubeConfigTest {
 
   @Test
   public void testToken() {
-    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(KUBECONFIG_TOKEN));
+    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(KUBECONFIG_TOKEN), null);
     assertEquals(config.getAccessToken(), "foobaz");
   }
 
@@ -63,7 +67,7 @@ public class KubeConfigTest {
 
     String replace = KUBECONFIG_TOKEN.replace("foobaz", tokenFile.getCanonicalPath());
     replace = replace.replace("token:", "tokenFile:");
-    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(replace));
+    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(replace), null);
     assertEquals(config.getAccessToken(), token);
   }
 
@@ -98,7 +102,7 @@ public class KubeConfigTest {
       writer.flush();
       writer.close();
 
-      KubeConfig kc = KubeConfig.loadKubeConfig(new FileReader(config));
+      KubeConfig kc = KubeConfig.loadKubeConfig(new FileReader(config), config.toPath());
       assertEquals("fake-token", kc.getAccessToken());
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -129,7 +133,7 @@ public class KubeConfigTest {
             + "      name: gcp";
     KubeConfig.registerAuthenticator(new GCPAuthenticator());
     try {
-      KubeConfig kc = KubeConfig.loadKubeConfig(new StringReader(gcpConfigExpiredToken));
+      KubeConfig kc = KubeConfig.loadKubeConfig(new StringReader(gcpConfigExpiredToken), null);
       kc.getAccessToken();
     } catch (Exception ex) {
       if (!(ex instanceof IllegalStateException)) {
@@ -159,7 +163,7 @@ public class KubeConfigTest {
             + "        token-key: '{.credential.access_token}'\n"
             + "      name: azure\n";
     try {
-      KubeConfig kc = KubeConfig.loadKubeConfig(new StringReader(azureConfig));
+      KubeConfig kc = KubeConfig.loadKubeConfig(new StringReader(azureConfig), null);
       assertEquals("fake-azure-token", kc.getAccessToken());
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -169,13 +173,52 @@ public class KubeConfigTest {
 
   @Test
   public void testNamespace() {
-    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(KUBECONFIG_TOKEN));
+    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(KUBECONFIG_TOKEN), null);
     assertEquals(config.getNamespace(), "some_namespace");
   }
 
   @Test
   public void testNullNamespace() {
-    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(GCP_CONFIG));
+    KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(GCP_CONFIG), null);
     assertNull(config.getNamespace());
+  }
+
+  @Test
+  public void testBasePath() {
+    try {
+      File subFolder = folder.newFolder();
+      File config = new File(subFolder, "config");
+      FileWriter writer = new FileWriter(config);
+
+      String certConfig =
+          "apiVersion: v1\n"
+              + "contexts:\n"
+              + "- context:\n"
+              + "    user: cert-cluster\n"
+              + "  name: foo-context\n"
+              + "current-context: foo-context\n"
+              + "users:\n"
+              + "- name: cert-cluster\n"
+              + "  user:\n"
+              + "    client-key: client.key\n"
+              + "    client-certificate: client.cert\n";
+      writer.write(certConfig);
+      writer.flush();
+      writer.close();
+
+      URL clientCert = Resources.getResource("clientauth.cert");
+      File clientCertFile = new File(subFolder, "client.cert");
+      ByteStreams.copy(clientCert.openStream(), new FileOutputStream(clientCertFile));
+
+      KubeConfig kc = KubeConfig.loadKubeConfig(config);
+      assertEquals(kc.getBasePath(), subFolder.toPath());
+      byte[] data = KubeConfig.getDataOrFile(null, kc.getClientCertificateFile(), kc.getBasePath());
+      byte[] expected = Files.readAllBytes(clientCertFile.toPath());
+
+      assertArrayEquals(expected, data);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      fail("Unexpected exception: " + ex);
+    }
   }
 }

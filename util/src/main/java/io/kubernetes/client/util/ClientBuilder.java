@@ -79,7 +79,8 @@ public class ClientBuilder {
     final File kubeConfig = findConfigFromEnv();
     if (kubeConfig != null) {
       try (FileReader kubeConfigReader = new FileReader(kubeConfig)) {
-        KubeConfig kc = KubeConfig.loadKubeConfig(kubeConfigReader);
+        KubeConfig kc =
+            KubeConfig.loadKubeConfig(kubeConfigReader, kubeConfig.toPath().getParent());
         if (persistConfig) {
           kc.setPersistConfig(new FilePersister(kubeConfig));
         }
@@ -89,7 +90,7 @@ public class ClientBuilder {
     final File config = findConfigInHomeDir();
     if (config != null) {
       try (FileReader configReader = new FileReader(config)) {
-        KubeConfig kc = KubeConfig.loadKubeConfig(configReader);
+        KubeConfig kc = KubeConfig.loadKubeConfig(configReader, config.toPath().getParent());
         if (persistConfig) {
           kc.setPersistConfig(new FilePersister(config));
         }
@@ -202,7 +203,9 @@ public class ClientBuilder {
 
     final byte[] caBytes =
         KubeConfig.getDataOrFile(
-            config.getCertificateAuthorityData(), config.getCertificateAuthorityFile());
+            config.getCertificateAuthorityData(),
+            config.getCertificateAuthorityFile(),
+            config.getBasePath());
     if (caBytes != null) {
       builder.setCertificateAuthority(caBytes);
     }
