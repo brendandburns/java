@@ -46,15 +46,15 @@ public class PagerTest {
 
   private ApiClient client;
   private static final String LIST_PAGE0_FILE_PATH =
-      PagerTest.class.getClassLoader().getResource("namespace-list-pager0.json").getPath();
+      PagerTest.class.getClassLoader().getResource("namespace-list-pager0.json").getPath().replace("C:/", "");
   private static final String LIST_PAGE1_FILE_PATH =
-      PagerTest.class.getClassLoader().getResource("namespace-list-pager1.json").getPath();
+      PagerTest.class.getClassLoader().getResource("namespace-list-pager1.json").getPath().replace("C:/", "");
   private static final String LIST_PAGE2_FILE_PATH =
-      PagerTest.class.getClassLoader().getResource("namespace-list-pager2.json").getPath();
+      PagerTest.class.getClassLoader().getResource("namespace-list-pager2.json").getPath().replace("C:/", "");
   private static final String LIST_STATUS_FILE_PATH =
-      PagerTest.class.getClassLoader().getResource("status-400.json").getPath();
+      PagerTest.class.getClassLoader().getResource("status-400.json").getPath().replace("C:/", "");
   private static final String STATUS_BAD_TOKEN_FILE_PATH =
-      PagerTest.class.getClassLoader().getResource("bad-token-status.json").getPath();
+      PagerTest.class.getClassLoader().getResource("bad-token-status.json").getPath().replace("C:/", "");
   @Rule public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
 
   @Before

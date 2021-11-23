@@ -62,6 +62,8 @@ public class ClientBuilderTest {
   public void testDefaultClientWithNoFiles() throws Exception {
     String path =
         withEnvironmentVariable("HOME", "/non-existent")
+            .and("HOMEDRIVE", null)
+            .and("USERPROFILE", null)
             .and("KUBECONFIG", null)
             .execute(
                 () -> {
@@ -139,6 +141,8 @@ public class ClientBuilderTest {
     String path =
         withEnvironmentVariable("KUBECONFIG", "/non-existent")
             .and("HOME", "/none-existent")
+            .and("HOMEDRIVE", null)
+            .and("USERPROFILE", null)
             .execute(
                 () -> {
                   final ApiClient client = ClientBuilder.standard().build();
@@ -217,7 +221,7 @@ public class ClientBuilderTest {
   public void testSslCertCaGood() throws Exception {
     final ApiClient client =
         new ClientBuilder()
-            .setCertificateAuthority(Files.readAllBytes(Paths.get(SSL_CA_CERT_PATH)))
+            .setCertificateAuthority(Files.readAllBytes(Paths.get(SSL_CA_CERT_PATH.replace("C:/", ""))))
             .build();
   }
 
@@ -225,7 +229,7 @@ public class ClientBuilderTest {
   public void testSslCertCaBad() throws Exception {
     final ApiClient client =
         new ClientBuilder()
-            .setCertificateAuthority(Files.readAllBytes(Paths.get(INVALID_SSL_CA_CERT_PATH)))
+            .setCertificateAuthority(Files.readAllBytes(Paths.get(INVALID_SSL_CA_CERT_PATH.replace("C:/", ""))))
             .build();
   }
 

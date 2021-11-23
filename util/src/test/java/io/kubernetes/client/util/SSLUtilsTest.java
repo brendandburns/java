@@ -23,15 +23,15 @@ import junit.framework.TestCase;
 
 public class SSLUtilsTest extends TestCase {
 
-  private static final String CLIENT_KEY_PATH = Resources.getResource("clientauth.key").getPath();
+  private static final String CLIENT_KEY_PATH = Resources.getResource("clientauth.key").getPath().replace("C:/", "");
   private static final String CLIENT_KEY_RSA_PATH =
-      Resources.getResource("clientauth-rsa.key").getPath();
+      Resources.getResource("clientauth-rsa.key").getPath().replace("C:/", "");
   private static final String CLIENT_KEY_EC_PATH =
-      Resources.getResource("clientauth-ec.key").getPath();
+      Resources.getResource("clientauth-ec.key").getPath().replace("C:/", "");
 
   public void testPKCS8KeyLoadDump()
       throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-    byte[] loaded = Files.readAllBytes(Paths.get(CLIENT_KEY_PATH));
+    byte[] loaded = Files.readAllBytes(Paths.get(CLIENT_KEY_PATH.replace("C:/", "")));
     PrivateKey privateKey = SSLUtils.loadKey(loaded);
     byte[] dumped = SSLUtils.dumpKey(privateKey);
     PrivateKey reloaded = SSLUtils.loadKey(dumped);

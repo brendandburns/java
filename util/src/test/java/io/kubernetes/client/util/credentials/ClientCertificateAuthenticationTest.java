@@ -19,26 +19,26 @@ import java.nio.file.Paths;
 import org.junit.Test;
 
 public class ClientCertificateAuthenticationTest {
-  private static final String CLIENT_CERT_PATH = Resources.getResource("clientauth.cert").getPath();
+  private static final String CLIENT_CERT_PATH = Resources.getResource("clientauth.cert").getPath().replace("C:/", "");
   private static final String CLIENT_EC_CERT_PATH =
-      Resources.getResource("clientauth-ec.cert").getPath();
+      Resources.getResource("clientauth-ec.cert").getPath().replace("C:/", "");
 
   // RSA key in PKCS8 format
-  private static final String CLIENT_KEY_PATH = Resources.getResource("clientauth.key").getPath();
+  private static final String CLIENT_KEY_PATH = Resources.getResource("clientauth.key").getPath().replace("C:/", "");
   // EC key in PKCS8 format
   private static final String CLIENT_EC_KEY_PATH =
-      Resources.getResource("clientauth-ec-fixed.key").getPath();
+      Resources.getResource("clientauth-ec-fixed.key").getPath().replace("C:/", "");
   // RSA key in PKCS1 format
   private static final String CLIENT_KEY_OLD_PATH =
-      Resources.getResource("clientauth-rsa.key").getPath();
+      Resources.getResource("clientauth-rsa.key").getPath().replace("C:/", "");
   // EC key in PKCS7 format
   private static final String CLIENT_EC_KEY_OLD_PATH =
-      Resources.getResource("clientauth-ec.key").getPath();
+      Resources.getResource("clientauth-ec.key").getPath().replace("C:/", "");
 
   private static final String CLIENT_CERT_CHAIN_PATH =
-      Resources.getResource("clientauth-chain.cert").getPath();
+      Resources.getResource("clientauth-chain.cert").getPath().replace("C:/", "");
   private static final String CLIENT_CERT_CHAIN_KEY_PATH =
-      Resources.getResource("clientauth-chain.key").getPath();
+      Resources.getResource("clientauth-chain.key").getPath().replace("C:/", "");
 
   @Test
   public void testValidCertificates() throws Exception {

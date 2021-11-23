@@ -32,13 +32,13 @@ import org.junit.Test;
 public class KubectlCreateTest {
 
   private static final String DISCOVERY_API =
-      KubectlCreateTest.class.getClassLoader().getResource("discovery-api.json").getPath();
+      KubectlCreateTest.class.getClassLoader().getResource("discovery-api.json").getPath().replace("C:/", "");
 
   private static final String DISCOVERY_APIV1 =
-      KubectlCreateTest.class.getClassLoader().getResource("discovery-api-v1.json").getPath();
+      KubectlCreateTest.class.getClassLoader().getResource("discovery-api-v1.json").getPath().replace("C:/", "");
 
   private static final String DISCOVERY_APIS =
-      KubectlCreateTest.class.getClassLoader().getResource("discovery-apis.json").getPath();
+      KubectlCreateTest.class.getClassLoader().getResource("discovery-apis.json").getPath().replace("C:/", "");
 
   private ApiClient apiClient;
 

@@ -25,9 +25,9 @@ import org.junit.Test;
 
 public class DynamicsTest {
 
-  private static final String TEST_POD_YAML_FILE = Resources.getResource("test-pod.yaml").getPath();
+  private static final String TEST_POD_YAML_FILE = Resources.getResource("test-pod.yaml").getPath().replace("C:/", "");
 
-  private static final String TEST_POD_JSON_FILE = Resources.getResource("test-pod.json").getPath();
+  private static final String TEST_POD_JSON_FILE = Resources.getResource("test-pod.json").getPath().replace("C:/", "");
 
   private JSON json = new JSON();
 

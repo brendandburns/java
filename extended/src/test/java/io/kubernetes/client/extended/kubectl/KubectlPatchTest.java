@@ -37,13 +37,13 @@ import org.junit.Test;
 public class KubectlPatchTest {
 
   private static final String DISCOVERY_API =
-      KubectlPatchTest.class.getClassLoader().getResource("discovery-api.json").getPath();
+      KubectlPatchTest.class.getClassLoader().getResource("discovery-api.json").getPath().replace("C:/", "");
 
   private static final String DISCOVERY_APIV1 =
-      KubectlPatchTest.class.getClassLoader().getResource("discovery-api-v1.json").getPath();
+      KubectlPatchTest.class.getClassLoader().getResource("discovery-api-v1.json").getPath().replace("C:/", "");
 
   private static final String DISCOVERY_APIS =
-      KubectlPatchTest.class.getClassLoader().getResource("discovery-apis.json").getPath();
+      KubectlPatchTest.class.getClassLoader().getResource("discovery-apis.json").getPath().replace("C:/", "");
 
   private ApiClient apiClient;
 

@@ -50,34 +50,36 @@ public class KubectlRolloutTest {
   @Rule public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
 
   private static final String DEPLOYMENT =
-      KubectlRolloutTest.class.getClassLoader().getResource("deployment.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("deployment.json").getPath().replace("C:/", "");
 
   private static final String REPLICASET_LIST =
-      KubectlRolloutTest.class.getClassLoader().getResource("replicaset-list.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("replicaset-list.json").getPath().replace("C:/", "");
 
   private static final String DAEMON_SET =
-      KubectlRolloutTest.class.getClassLoader().getResource("daemonset.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("daemonset.json").getPath().replace("C:/", "");
 
   private static final String PATCHED_DAEMON_SET =
-      KubectlRolloutTest.class.getClassLoader().getResource("patched-daemonset.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("patched-daemonset.json").getPath().replace("C:/", "");
 
   private static final String DAEMON_SET_CONTROLLER_REVISION_LIST =
       KubectlRolloutTest.class
           .getClassLoader()
           .getResource("daemonset-controllerrevision-list.json")
-          .getPath();
+          .getPath()
+          .replace("C:/", "");
 
   private static final String STATEFUL_SET =
-      KubectlRolloutTest.class.getClassLoader().getResource("statefulset.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("statefulset.json").getPath().replace("C:/", "");
 
   private static final String PATCHED_STATEFUL_SET =
-      KubectlRolloutTest.class.getClassLoader().getResource("patched-statefulset.json").getPath();
+      KubectlRolloutTest.class.getClassLoader().getResource("patched-statefulset.json").getPath().replace("C:/", "");
 
   private static final String STATEFUL_SET_CONTROLLER_REVISION_LIST =
       KubectlRolloutTest.class
           .getClassLoader()
           .getResource("statefulset-controllerrevision-list.json")
-          .getPath();
+          .getPath()
+          .replace("C:/", "");
 
   @Before
   public void setup() throws IOException {

@@ -35,9 +35,9 @@ import org.junit.Test;
 
 public class TokenFileAuthenticationTest {
   private static final String SERVICEACCOUNT_TOKEN1_PATH =
-      Resources.getResource("token1").getPath();
+      Resources.getResource("token1").getPath().replace("C:/", "");
   private static final String SERVICEACCOUNT_TOKEN2_PATH =
-      Resources.getResource("token2").getPath();
+      Resources.getResource("token2").getPath().replace("C:/", "");
   private static final int PORT = 8089;
   private TokenFileAuthentication auth;
 

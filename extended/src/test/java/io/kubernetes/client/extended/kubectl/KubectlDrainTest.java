@@ -41,7 +41,7 @@ import org.junit.Test;
 public class KubectlDrainTest {
 
   private static final String POD_LIST_API =
-      KubectlDrainTest.class.getClassLoader().getResource("pod-list.json").getPath();
+      KubectlDrainTest.class.getClassLoader().getResource("pod-list.json").getPath().replace("C:/", "");
 
   private ApiClient apiClient;
 

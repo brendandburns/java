@@ -46,10 +46,10 @@ public class DeploymentHelperTest {
   @Rule public WireMockRule wireMockRule = new WireMockRule(options().dynamicPort(), false);
 
   private static final String DEPLOYMENT =
-      DeploymentHelperTest.class.getClassLoader().getResource("deployment.json").getPath();
+      DeploymentHelperTest.class.getClassLoader().getResource("deployment.json").getPath().replace("C:/", "");
 
   private static final String REPLICASET_LIST =
-      DeploymentHelperTest.class.getClassLoader().getResource("replicaset-list.json").getPath();
+      DeploymentHelperTest.class.getClassLoader().getResource("replicaset-list.json").getPath().replace("C:/", "");
 
   @Before
   public void setup() throws IOException {
