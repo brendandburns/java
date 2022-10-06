@@ -18,7 +18,7 @@ jobs:
         # test against latest update of each major Java version, as well as specific updates of LTS versions:
         java: [ 8.0.x, 9.0.x, 10.0.x, 11.0.x, 12.0.x, 13.0.x ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     name: GraalVM Maven Test
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       - uses: DeLaGuardo/setup-graalvm@3
         with:
           graalvm-version: '19.3.0.java8'
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     name: End-to-End Test Against Real Cluster
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.0.0
       - name: Run E2E with Maven
